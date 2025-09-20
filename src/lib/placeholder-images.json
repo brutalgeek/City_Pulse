@@ -1,0 +1,35 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "map-placeholder",
+      "description": "A placeholder image of a city map with pins.",
+      "imageUrl": "https://picsum.photos/seed/citymap/1200/500",
+      "imageHint": "city map"
+    },
+    {
+      "id": "pothole",
+      "description": "A deep pothole on a city street.",
+      "imageUrl": "https://picsum.photos/seed/pothole/600/400",
+      "imageHint": "pothole road"
+    },
+    {
+      "id": "streetlight",
+      "description": "A broken streetlight at night.",
+      "imageUrl": "https://picsum.photos/seed/streetlight/600/400",
+      "imageHint": "street light"
+    },
+    {
+      "id": "trash",
+      "description": "An overflowing public dumpster.",
+      "imageUrl": "https://picsum.photos/seed/trash/600/400",
+      "imageHint": "overflowing trash"
+    },
+    {
+      "id": "graffiti",
+      "description": "Graffiti on a public library wall.",
+      "imageUrl": "https://picsum.photos/seed/graffiti/600/400",
+      "imageHint": "graffiti wall"
+    }
+  ]
+}
