@@ -1,0 +1,42 @@
+/* Import Leaflet CSS */
+@import 'leaflet/dist/leaflet.css';
+
+/* Custom marker styles */
+.issue-marker {
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.issue-marker.reported {
+  background-color: #ef4444;
+}
+
+.issue-marker.acknowledged {
+  background-color: #eab308;
+}
+
+.issue-marker.in-progress {
+  background-color: #3b82f6;
+}
+
+.issue-marker.resolved {
+  background-color: #22c55e;
+}
+
+/* Custom popup styles */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+}
+
+/* Map container styles */
+.map-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}

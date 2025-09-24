@@ -95,24 +95,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Make a Difference?</h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands of citizens working together to improve our city
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-secondary hover:bg-secondary/90">
-              <Link to="/signup">Sign Up Now</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link to="/login">Already have an account?</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

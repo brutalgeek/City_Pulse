@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,25 +21,10 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      const response = await axios.post("http://localhost:5000/signup", formData, {
-        headers: { "Content-Type": "application/json" }
-      });
-
-      console.log("Signup success:", response.data);
-      setSuccess("Account created successfully!");
-      setFormData({ name: "", email: "", password: "", userType: "user" });
-    } catch (err) {
-      console.error("Signup error:", err);
-      setError(err.response?.data?.message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    console.log("Signup data:", formData);
+    // Handle signup logic here
   };
+
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };

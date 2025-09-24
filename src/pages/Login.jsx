@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,7 +17,23 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Login data:", formData);
-    // Handle login logic here
+    
+    // Basic validation
+    if (!formData.email || !formData.password) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    // Simulate login logic - replace with actual authentication
+    // For now, we'll just redirect based on user type
+    if (formData.userType === "admin") {
+      navigate("/dashboard");
+    } else {
+      navigate("/home");
+    }
+    
+    // You can add actual authentication logic here
+    console.log("Redirecting user...");
   };
 
   const handleChange = (field, value) => {
