@@ -1,6 +1,6 @@
-// src/pages/SignUpPage.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,37 +15,56 @@ const SignUpPage = () => {
     name: "",
     email: "",
     password: "",
-    userType: "user"
+    role: "user" // Must match backend field
   });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.password) {
-      alert("Please fill in all fields");
-      return;
-    }
-
-    // Simulate signup and auto-login - replace with actual registration
-    console.log("Signup data:", formData);
-    
-    // Auto-login the user after successful signup
-    const userData = {
-      email: formData.email,
-      role: formData.userType, // Use 'role' instead of 'userType'
-      name: formData.name
-    };
-    
-    login(userData);
-    
-    // Redirect directly to home regardless of user type
-    alert("Account created successfully! Welcome to City Pulse!");
-    navigate("/home");
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    if (!formData.name || !formData.email || !formData.password) {
+      alert("Please fill in all fields");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Send form data to backend
+      const response = await axios.post(
+        "http://localhost:5000/signup",
+        formData,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      console.log("Signup success:", response.data);
+
+      // Auto-login user
+      login({
+        email: formData.email,
+        name: formData.name,
+        role: formData.role
+      });
+
+      // Reset form
+      setFormData({ name: "", email: "", password: "", role: "user" });
+
+      // Redirect to home
+      alert("Account created successfully! Welcome to City Pulse!");
+      navigate("/home");
+
+    } catch (err) {
+      console.error("Signup error:", err.response?.data || err);
+      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -97,7 +116,7 @@ const SignUpPage = () => {
 
             <div className="space-y-3">
               <Label>Register as</Label>
-              <RadioGroup value={formData.userType} onValueChange={(value) => handleChange("userType", value)}>
+              <RadioGroup value={formData.role} onValueChange={(value) => handleChange("role", value)}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="user" id="user" />
                   <Label htmlFor="user">Citizen</Label>
@@ -109,9 +128,11 @@ const SignUpPage = () => {
               </RadioGroup>
             </div>
 
-            <Button type="submit" className="w-full">
-              Create Account
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating..." : "Create Account"}
             </Button>
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
 
             <div className="text-center">
               <button

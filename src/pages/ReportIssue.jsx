@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,11 +17,12 @@ const ReportIssue = () => {
   });
 
   const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Issue report:", formData);
-    // Handle issue submission logic here
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const getCurrentLocation = () => {
@@ -29,7 +31,7 @@ const ReportIssue = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setFormData(prev => ({ ...prev, location: `${latitude}, ${longitude}` }));
+          handleChange("location", `${latitude},${longitude}`);
           setIsGettingLocation(false);
         },
         (error) => {
@@ -42,7 +44,49 @@ const ReportIssue = () => {
 
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files);
-    setFormData(prev => ({ ...prev, images: [...prev.images, ...files] }));
+    handleChange("images", [...formData.images, ...files]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      // Build FormData
+      const data = new FormData();
+      data.append("title", formData.title);
+      data.append("description", formData.description);
+      data.append("category", formData.category);
+      data.append("location", formData.location);
+
+      formData.images.forEach((file, index) => {
+        data.append("images", file); // multiple files with same key
+      });
+
+      const response = await axios.post("http://localhost:5000/report-issue", data, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+
+      console.log("Issue submitted:", response.data);
+      setSuccess("Issue reported successfully!");
+      setFormData({
+        title: "",
+        description: "",
+        category: "",
+        location: "",
+        images: []
+      });
+
+    } catch (err) {
+      console.error("Error submitting issue:", err.response?.data || err);
+      setError(err.response?.data?.message || "Failed to submit issue");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,24 +103,26 @@ const ReportIssue = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Title */}
             <div className="space-y-2">
               <Label htmlFor="title">Issue Title</Label>
               <Input
                 id="title"
                 placeholder="Brief description of the issue"
                 value={formData.title}
-                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                onChange={(e) => handleChange("title", e.target.value)}
                 required
               />
             </div>
 
+            {/* Category */}
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
               <select
                 id="category"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 value={formData.category}
-                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                onChange={(e) => handleChange("category", e.target.value)}
                 required
               >
                 <option value="">Select a category</option>
@@ -90,6 +136,7 @@ const ReportIssue = () => {
               </select>
             </div>
 
+            {/* Description */}
             <div className="space-y-2">
               <Label htmlFor="description">Detailed Description</Label>
               <Textarea
@@ -97,11 +144,12 @@ const ReportIssue = () => {
                 placeholder="Provide detailed information about the issue..."
                 rows={4}
                 value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) => handleChange("description", e.target.value)}
                 required
               />
             </div>
 
+            {/* Location */}
             <div className="space-y-2">
               <Label htmlFor="location">Location</Label>
               <div className="flex gap-2">
@@ -109,7 +157,7 @@ const ReportIssue = () => {
                   id="location"
                   placeholder="Enter location or use current location"
                   value={formData.location}
-                  onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                  onChange={(e) => handleChange("location", e.target.value)}
                   required
                 />
                 <Button
@@ -125,6 +173,7 @@ const ReportIssue = () => {
               </div>
             </div>
 
+            {/* File Upload */}
             <div className="space-y-2">
               <Label htmlFor="images">Upload Images/Videos</Label>
               <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
@@ -153,9 +202,12 @@ const ReportIssue = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" size="lg">
-              Submit Issue Report
+            <Button type="submit" className="w-full" size="lg" disabled={loading}>
+              {loading ? "Submitting..." : "Submit Issue Report"}
             </Button>
+
+            {success && <p className="text-green-500 mt-2">{success}</p>}
+            {error && <p className="text-red-500 mt-2">{error}</p>}
           </form>
         </CardContent>
       </Card>
