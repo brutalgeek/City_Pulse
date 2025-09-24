@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,15 +12,34 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
-    userType: "user"
+    role: "user"
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Signup data:", formData);
-    // Handle signup logic here
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await axios.post("http://localhost:5000/signup", formData, {
+        headers: { "Content-Type": "application/json" }
+      });
+
+      console.log("Signup success:", response.data);
+      setSuccess("Account created successfully!");
+      setFormData({ name: "", email: "", password: "", userType: "user" });
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -85,9 +105,12 @@ const Signup = () => {
               </RadioGroup>
             </div>
 
-            <Button type="submit" className="w-full">
-              Create Account
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating..." : "Create Account"}
             </Button>
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {success && <p className="text-green-500 text-sm">{success}</p>}
 
             <div className="text-center text-sm">
               Already have an account?{" "}
