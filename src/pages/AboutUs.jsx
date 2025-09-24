@@ -1,5 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Target, Heart, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { Users, Target, Heart, Award, ArrowLeft, Home } from "lucide-react";
 
 const AboutUs = () => {
   const team = [
@@ -18,6 +20,22 @@ const AboutUs = () => {
 
   return (
     <div className="container mx-auto p-4">
+      {/* Navigation */}
+      <div className="flex justify-between items-center mb-8">
+        <Button asChild variant="outline" size="sm">
+          <Link to="/home" className="flex items-center gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Link>
+        </Button>
+        <Button asChild variant="default" size="sm">
+          <Link to="/home" className="flex items-center gap-2">
+            <Home className="w-4 h-4" />
+            Home
+          </Link>
+        </Button>
+      </div>
+
       {/* Hero Section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4">About City Pulse</h1>
@@ -125,6 +143,26 @@ const AboutUs = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Call to Action */}
+      <div className="text-center mt-16 py-12 bg-primary/5 rounded-lg">
+        <h2 className="text-2xl font-bold mb-4">Ready to Make a Difference?</h2>
+        <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+          Join thousands of citizens who are already making their communities better. 
+          Start reporting issues or explore what's happening in your area.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
+            <Link to="/report-issue">Report an Issue</Link>
+          </Button>
+          <Button asChild variant="outline" size="lg">
+            <Link to="/map">Explore Issues Map</Link>
+          </Button>
+          <Button asChild variant="outline" size="lg">
+            <Link to="/dashboard">View Dashboard</Link>
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
