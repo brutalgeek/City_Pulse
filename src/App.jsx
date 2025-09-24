@@ -4,13 +4,14 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-// Layout
+import { AuthProvider } from "./context/AuthContext";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-// Pages
+import Landing from "./pages/Landing";
+import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
 import Home from "./pages/Home";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
 import ReportIssue from "./pages/ReportIssue";
 import MapView from "./pages/MapView";
 import Dashboard from "./pages/Dashboard";
@@ -22,36 +23,61 @@ import HelpCenter from "./pages/HelpCenter";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
+import MapTest from "./pages/MapTest";
+import AdminDemo from "./pages/AdminDemo";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/report-issue" element={<ReportIssue />} />
-            <Route path="/map" element={<MapView />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/issue/:id" element={<IssueDetails />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/updates" element={<Updates />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/help" element={<HelpCenter />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/signin" element={<SignInPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
+              
+              <Route path="/home" element={
+                <ProtectedRoute>
+                  <Layout><Home /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/report-issue" element={
+                <ProtectedRoute>
+                  <Layout><ReportIssue /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/map" element={
+                <ProtectedRoute>
+                  <Layout><MapView /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/map-test" element={<MapTest />} />
+              <Route path="/admin-demo" element={
+                <ProtectedRoute>
+                  <Layout><AdminDemo /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Layout><Dashboard /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="*" element={
+                <ProtectedRoute>
+                  <Layout><NotFound /></Layout>
+                </ProtectedRoute>
+              } />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

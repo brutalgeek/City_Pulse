@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,7 +18,20 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Signup data:", formData);
-    // Handle signup logic here
+    
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.password) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    // Simulate signup logic - replace with actual registration
+    // For now, redirect to login page after successful signup
+    alert("Account created successfully! Please sign in.");
+    navigate("/login");
+    
+    // You can add actual registration logic here
+    console.log("Redirecting to login...");
   };
 
   const handleChange = (field, value) => {

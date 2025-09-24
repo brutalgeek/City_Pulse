@@ -2,17 +2,27 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import cityPulseLogo from "@/assets/city-pulse-logo.png";
 
 const Layout = ({ children }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAuthenticated, user, logout, isAdmin } = useAuth();
 
   const navigation = [
-    { name: "Home", href: "/" },
-    { name: "Report Issue", href: "/report-issue" },
+    { name: "Home", href: "/home" },
+    { name: "Report Issue", href: "/report-issue", userOnly: true },
     { name: "Map View", href: "/map" },
     { name: "Dashboard", href: "/dashboard" },
   ];
+
+  // Filter navigation based on user role
+  const filteredNavigation = navigation.filter(item => {
+    if (item.userOnly && isAdmin()) {
+      return false; // Hide "Report Issue" for admins
+    }
+    return true;
+  });
 
   const footerLinks = [
     { name: "About Us", href: "/about" },
@@ -38,27 +48,42 @@ const Layout = ({ children }) => {
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
+            {/* Desktop Navigation - Only show when authenticated */}
+            {isAuthenticated && (
+              <div className="hidden md:flex items-center space-x-8">
+                {filteredNavigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            )}
 
-            {/* Auth Buttons */}
+            {/* Auth Section */}
             <div className="hidden md:flex items-center space-x-4">
-              <Button asChild variant="ghost">
-                <Link to="/login">Login</Link>
-              </Button>
-              <Button asChild>
-                <Link to="/signup">Sign Up</Link>
-              </Button>
+              {isAuthenticated ? (
+                <>
+                  <span className="text-sm text-muted-foreground">
+                    Welcome, {user?.name || 'User'}
+                  </span>
+                  <Button onClick={logout} variant="ghost">
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild variant="ghost">
+                    <Link to="/signin">Sign In</Link>
+                  </Button>
+                  <Button asChild>
+                    <Link to="/signup">Sign Up</Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -77,7 +102,7 @@ const Layout = ({ children }) => {
           {mobileMenuOpen && (
             <div className="md:hidden">
               <div className="space-y-1 pb-3 pt-2">
-                {navigation.map((item) => (
+                {filteredNavigation.map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}
