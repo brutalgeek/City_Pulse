@@ -20,7 +20,7 @@ The **Crowd Sourced Civic Issue Reporting & Resolution System** is a platform th
 ## 🏗 Tech Stack  
 - **Frontend:** React.js + TailwindCSS  
 - **Backend:** Node.js + Express  
-- **Database:** MongoDB  
+- **Database:** PostgreSQL  
 - **Authentication:** JWT-based authentication  
 - **Deployment:** AWS / Vercel / Render  
 
