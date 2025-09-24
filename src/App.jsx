@@ -62,6 +62,41 @@ const App = () => {
                   <Layout><AdminDemo /></Layout>
                 </ProtectedRoute>
               } />
+              <Route path="/about" element={
+                <ProtectedRoute>
+                  <Layout><AboutUs /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/updates" element={
+                <ProtectedRoute>
+                  <Layout><Updates /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/faq" element={
+                <ProtectedRoute>
+                  <Layout><FAQ /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/help" element={
+                <ProtectedRoute>
+                  <Layout><HelpCenter /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/terms" element={
+                <ProtectedRoute>
+                  <Layout><TermsOfService /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/privacy" element={
+                <ProtectedRoute>
+                  <Layout><PrivacyPolicy /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/issue/:id" element={
+                <ProtectedRoute>
+                  <Layout><IssueDetails /></Layout>
+                </ProtectedRoute>
+              } />
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <Layout><Dashboard /></Layout>

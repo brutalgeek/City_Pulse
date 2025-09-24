@@ -95,6 +95,65 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* About Us Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-6">About City Pulse</h2>
+            <p className="text-lg text-muted-foreground mb-8">
+              We're revolutionizing how citizens interact with local government through technology, 
+              transparency, and community collaboration. Our platform empowers every citizen to make 
+              a difference in their community.
+            </p>
+            
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">50,000+</div>
+                <div className="text-sm text-muted-foreground">Active Citizens</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">15,000+</div>
+                <div className="text-sm text-muted-foreground">Issues Resolved</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">200+</div>
+                <div className="text-sm text-muted-foreground">Communities</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">24/7</div>
+                <div className="text-sm text-muted-foreground">Support</div>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div className="text-left">
+                <h3 className="text-xl font-semibold mb-3 text-primary">Our Mission</h3>
+                <p className="text-muted-foreground">
+                  To bridge the gap between citizens and local government by providing a transparent, 
+                  efficient platform for reporting and resolving civic issues.
+                </p>
+              </div>
+              <div className="text-left">
+                <h3 className="text-xl font-semibold mb-3 text-primary">Our Vision</h3>
+                <p className="text-muted-foreground">
+                  A world where every citizen has the power to improve their community and every 
+                  local government is responsive, accountable, and efficient.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild variant="outline" size="lg">
+                <Link to="/about">Learn More About Us</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link to="/help">Get Support</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
